@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">CryptoRates</string>
+    <string name="action_settings">Settings</string>
+    <string name="delete_this_entry">Delete This Entry?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="dummy_currency_unit">USD</string>
+    <string name="dummy_val">10000000</string>
+    <string name="bitcoin">Bitcoin</string>
+    <string name="ethereum">Ethereum</string>
+    <string name="in_onStartLoading">in onSTartLoading</string>
+    <string name="in_LoadInBackground">in loadInBackground</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string-array name="cryptoCurrencies">
+        <item>BTC</item>
+        <item>ETH</item>
+    </string-array>
+
+    <string-array name="currencies">
+        <item>EUR</item>
+        <item>USD</item>
+        <item>NGN</item>
+    </string-array>
+</resources>
