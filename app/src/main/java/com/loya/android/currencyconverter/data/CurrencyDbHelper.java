@@ -17,7 +17,7 @@ public class CurrencyDbHelper extends SQLiteOpenHelper {
 
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 7;
 
     /**
      * name of the Database file
@@ -31,23 +31,58 @@ public class CurrencyDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         //CREATE TABLE pets (id INTEGER PRIMARY KEY, name TEXT, weight INTEGER);
         //create a String that contains the SQL Entries
         String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + CurrencyContract.CurrencyEntry.TABLE1_NAME + "("
                         + CurrencyContract.CurrencyEntry.BTC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOAUD + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOCAD + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOCHF + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOCNY + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTODKK + " REAL NOT NULL, "
                         + CurrencyContract.CurrencyEntry.COLUMN_BTCTOEUR + " REAL NOT NULL, "
-                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOUSD + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOGBP + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOINR + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOJPY + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOKRW + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOMXN + " REAL NOT NULL, "
                         + CurrencyContract.CurrencyEntry.COLUMN_BTCTONGN + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTONOK + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTONZD + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTORUB + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOSAR + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOSEK + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOSGD + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOTRY + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_BTCTOUSD + " REAL NOT NULL, "
                         + CurrencyContract.CurrencyEntry.COLUMN_BTCTIMESTAMP + " TEXT NOT NULL);";
+
+
 
         String SQL_CREATE_ENTRIES2 =
                 "CREATE TABLE " + CurrencyContract.CurrencyEntry.TABLE2_NAME + "("
                         + CurrencyContract.CurrencyEntry.ETH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOAUD + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOCAD + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOCHF + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOCNY + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTODKK + " REAL NOT NULL, "
                         + CurrencyContract.CurrencyEntry.COLUMN_ETHTOEUR + " REAL NOT NULL, "
-                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOUSD + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOGBP + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOINR + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOJPY + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOKRW + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOMXN + " REAL NOT NULL, "
                         + CurrencyContract.CurrencyEntry.COLUMN_ETHTONGN + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTONOK + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTONZD + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTORUB + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOSAR + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOSEK + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOSGD + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOTRY + " REAL NOT NULL, "
+                        + CurrencyContract.CurrencyEntry.COLUMN_ETHTOUSD + " REAL NOT NULL, "
                         + CurrencyContract.CurrencyEntry.COLUMN_ETHTIMESTAMP + " TEXT NOT NULL);";
 
         String SQL_CREATE_ENTRIES3 =

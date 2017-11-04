@@ -6,13 +6,60 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.loya.android.currencyconverter.Activites.MainActivity"
+    tools:context="com.loya.android.currencyconverter.activites.MainActivity"
     tools:showIn="@layout/activity_main">
 
-  <android.support.v7.widget.RecyclerView
-      android:id="@+id/recycler"
-      tools:listitem="@layout/convert_unit"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
+    <com.loya.android.currencyconverter.adapter.EmptyRecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!-- Added an empty view which will be shown when the EmptyRecyclerView
+           is empty -->
+    <RelativeLayout
+        android:id="@+id/todo_list_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="center">
 
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="96dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/empty_view_logo" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView2"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/you_have_no_currency_selected_yet"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/tap_to_add_one"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text2"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/do_ensure_you_have_an_active_internet_connection"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
 </FrameLayout>
