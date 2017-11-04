@@ -1,7 +1,6 @@
 package com.loya.android.currencyconverter.activites;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,7 +36,6 @@ import com.loya.android.currencyconverter.utils.CursorLoader;
 import com.loya.android.currencyconverter.utils.Helper;
 import com.loya.android.currencyconverter.utils.Toolbar_ActionMode_Callback;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -52,31 +50,26 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
     private LoaderManager.LoaderCallbacks<Cursor> cursorLoaderCallbacks;
     private LoaderManager.LoaderCallbacks<JSONObject> currencyLoaderCallbacks;
 
-    //adapter to be used for the list view
+    //adapter to be used for the recycler view
     private CurrencyAdapter mCurrencyAdapter;
-    //recycles view object
-    //  private RecyclerView mRecycler;
-
+    //EmptyRecyclerView  variable
     private EmptyRecyclerView mRecycler;
 
-
-    //integer Loader constant for the loader, could be any number
+    //integer Loader constant for the loader, could be any integer
     private static final int DB_LOADER_ID = 0;
     private static final int CURRENCY_LOADER_ID = 1;
 
-    private Toast mToast;
-
+    //Action made variable used to activate the contextual Action Mode
     private ActionMode mActionMode;
 
-
+    //variable used to check for the connection state of the device
     private ConnectivityManager cm;
-
-    private boolean isConnected;
-
     private NetworkInfo activeNetwork;
     //view for the loading indicator
-    View loadingIndicator;
+    private View loadingIndicator;
 
+    //boolean variables
+    private boolean isConnected;
     private boolean isRefresh;
 
     @Override
@@ -97,8 +90,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         mRecycler.setLayoutManager(linearLayoutManager);
         mRecycler.setHasFixedSize(true);
 
-        // Fetch the empty view from the layout and set it on
-        // the new recycler view
+        // Fetch the empty view from the layout and set it on the new recycler view
         View emptyView = findViewById(R.id.todo_list_empty_view);
         mRecycler.setEmptyView(emptyView);
 
@@ -106,9 +98,8 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         mCurrencyAdapter = new CurrencyAdapter(this, null, this);
         mRecycler.setAdapter(mCurrencyAdapter);
 
-        //init the DbHelper object
+        //init the DbHelper object to be used to perform database operations
         mDbHelper = new CurrencyDbHelper(this);
-
 
         //creates an object of LoaderCallbacks so as to perform Loading operation
         currencyLoaderCallbacks = new LoaderManager.LoaderCallbacks<JSONObject>() {
@@ -117,13 +108,12 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
                 if (isRefresh == true) {
                     showLoading();
                 }
-
                 return new CurrencyLoader(MainActivity.this, REQUEST_URL);
             }
 
             @Override
             public void onLoadFinished(Loader<JSONObject> loader, JSONObject data) {
-                //gets current time
+                //gets current time at which the data was fetched
                 currentTime = Helper.getCurrentTime();
                 dismissLoading();
                 // If there is no result, do nothing.
@@ -135,38 +125,29 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
                     Toast.makeText(MainActivity.this, R.string.current_exchange_rates_fetched_successfully, Toast.LENGTH_LONG).show();
                 }
                 //sends the JSONObject to update the database with the current rates
-                updateDatabase(data);
+                Helper.updateDatabase(data, MainActivity.this, currentTime);
+                isRefresh = false;
             }
 
             @Override
             public void onLoaderReset(Loader<JSONObject> loader) {
             }
         };
-
         //check if there is a network connection
         // if there is a network connection the LoaderManager is called but
         //  displays a message if there's no network connection
         cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
         activeNetwork = cm.getActiveNetworkInfo();
         isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-
         if (isConnected) {
-            /**
-             *
-             *  Ensure a loader is initialized and active. If the loader doesn't already exist, one is
-             * created, otherwise the last created loader is re-used to fetch current rates from the CryptoCompare API
-             *
-             */
+            //init loader
             getSupportLoaderManager().initLoader(CURRENCY_LOADER_ID, null, currencyLoaderCallbacks);
         } else {
             loadingIndicator.setVisibility(View.GONE);
-//            mEmptyStateTextView.setText(R.string.no_internet_connection);
-            Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, R.string.no_internet_connection, Toast.LENGTH_LONG).show();
         }
 
-
-        //creates an object of LoaderCallbacks so as to perform Loading operation
+        //creates an object of LoaderCallbacks so as to perform Loading operation on the database
         cursorLoaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -190,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
          created, otherwise the last created loader is re-used.
          */
         getSupportLoaderManager().initLoader(DB_LOADER_ID, null, cursorLoaderCallbacks);
+        //implement the listeners to handle clicks and contextual action mode
         implementRecyclerViewClickListeners();
         //sets a click listener on the FAB
         fab.setOnClickListener(new View.OnClickListener() {
@@ -220,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         }));
     }
 
-    //List item select method
+    //recycler item select method
     private void onListItemSelect(int position) {
         mCurrencyAdapter.toggleSelection(position);//Toggle the selection
 
@@ -228,9 +210,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
 
         if (hasCheckedItems && mActionMode == null) {
             // there are some selected items, start the actionMode
-            // Toolbar_ActionMode_Callback actionModeCallBack = new Toolbar_ActionMode_Callback(MainActivity.this, mCurrencyAdapter);
             mActionMode = startSupportActionMode(new Toolbar_ActionMode_Callback(MainActivity.this, mCurrencyAdapter));
-
         } else if (!hasCheckedItems && mActionMode != null) {
             // there no selected items, finish the actionMode
             mActionMode.finish();
@@ -246,14 +226,12 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         if (mActionMode != null) {
             mActionMode = null;
         }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //restarts the loader so as to get user selected cards
-
+        //restarts the loader so as to get user selected cards from the database
         getSupportLoaderManager().restartLoader(DB_LOADER_ID, null, cursorLoaderCallbacks);
     }
 
@@ -272,9 +250,10 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         int id = item.getItemId();
         // noinspection SimplifiableIfStatement
         if (id == R.id.action_get_current_rates) {
-            isRefresh = true;
+            isRefresh = true; //set to true before restarting the loader
             //restart the loader to get current exchange rates from cryptoCompare API
             getSupportLoaderManager().restartLoader(CURRENCY_LOADER_ID, null, currencyLoaderCallbacks);
+            //isRefresh = false; //set to false after restarting the loader
             return true;
         } else if (id == R.id.action_delete_all_cards) {
             if (mCurrencyAdapter.getItemCount() > 0) {
@@ -287,19 +266,18 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         return super.onOptionsItemSelected(item);
     }
 
-    //Delete selected rows---handle delete from db
+    //Delete selected rows
     public void deleteRows() {
         SparseBooleanArray selected = mCurrencyAdapter.getSelectedIds();//Get selected ids
         showDeleteConfirmationDialog(selected);
     }
 
-
     /**
      * Prompts the user to confirm that they want to delete the current card
      */
     private void showDeleteConfirmationDialog(final SparseBooleanArray selected) {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the positive and negative buttons on the dialog.
+        // Create an AlertDialog.Builder and set the message,
+        //  and click listeners for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (selected.size() > 1) {
             builder.setMessage(getString((R.string.delete)) + " " + selected.size() + getString(R.string.cards));
@@ -308,20 +286,19 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         }
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the entry.
+                // User clicked the "Delete" button, so delete the card.
                 //Loop all selected ids
                 for (int i = (selected.size() - 1); i >= 0; i--) {
                     if (selected.valueAt(i)) {
                         //If current id is selected remove the item via key---delete each item in db
                         deleteCurrency(selected.keyAt(i));
-                        //   Toast.makeText(MainActivity.this, selected.size() + " entries deleted", Toast.LENGTH_SHORT).show();
                         mCurrencyAdapter.notifyDataSetChanged();//notify adapter
                     }
                 }
                 if (selected.size() > 1) {
-                    Toast.makeText(MainActivity.this, selected.size() + " " + getString(R.string.cards_deleted), Toast.LENGTH_SHORT).show();//Show Toast
+                    Toast.makeText(MainActivity.this, selected.size() + "  " + getString(R.string.cards_deleted), Toast.LENGTH_SHORT).show();//Show Toast
                 } else {
-                    Toast.makeText(MainActivity.this, selected.size() + " " + getString(R.string.card_deleted), Toast.LENGTH_SHORT).show();//Show Toast
+                    Toast.makeText(MainActivity.this, selected.size() + "  " + getString(R.string.card_deleted), Toast.LENGTH_SHORT).show();//Show Toast
                 }
                 mActionMode.finish();//Finish action mode after use
                 //restarts the loader so as to get current data
@@ -343,6 +320,9 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         alertDialog.show();
     }
 
+    /**
+     * Prompts the user to confirm that they want to all current cards
+     */
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the positive and negative buttons on the dialog.
@@ -350,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         builder.setMessage(R.string.delete_all_cards);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the pet.
+                // User clicked the "Delete" button, so delete all cards.
                 deleteAll();
                 Toast.makeText(MainActivity.this, R.string.entries_deleted, Toast.LENGTH_LONG).show();
                 getSupportLoaderManager().restartLoader(DB_LOADER_ID, null, cursorLoaderCallbacks);
@@ -365,7 +345,6 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
                 }
             }
         });
-
         // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -386,143 +365,16 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         db.delete(CurrencyContract.CurrencyEntry.TABLE3_NAME, selection, selectionArgs);
     }
 
+    /**
+     * This deletes all cards in the database
+     */
     private void deleteAll() {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         db.delete(CurrencyContract.CurrencyEntry.TABLE3_NAME, null, null);
     }
 
-    /**
-     * Update the Database with the current Conversion Rates information from the CryptoCompare API.
-     */
-    private void updateDatabase(JSONObject jsonObject) {
-        //a SQLiteDatabase object used to delete items fro the database
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
-        //delete the existing currencies in the Database so as to have only current conversion rates in the Database
-        db.delete(CurrencyContract.CurrencyEntry.TABLE1_NAME, null, null);
-        db.delete(CurrencyContract.CurrencyEntry.TABLE2_NAME, null, null);
-        try {
-
-            //get ETH conversion Rates
-            JSONObject ethJsonObject = jsonObject.getJSONObject("ETH");
-            double aud = ethJsonObject.getDouble("AUD");
-            double cad = ethJsonObject.getDouble("CAD");
-            double chf = ethJsonObject.getDouble("CHF");
-            double cny = ethJsonObject.getDouble("CNY");
-            double dkk = ethJsonObject.getDouble("DKK");
-            double eur = ethJsonObject.getDouble("EUR");
-            double gbp = ethJsonObject.getDouble("GBP");
-            double inr = ethJsonObject.getDouble("INR");
-            double jpy = ethJsonObject.getDouble("JPY");
-            double krw = ethJsonObject.getDouble("KRW");
-            double mxn = ethJsonObject.getDouble("MXN");
-            double ngn = ethJsonObject.getDouble("NGN");
-            double nok = ethJsonObject.getDouble("NOK");
-            double nzd = ethJsonObject.getDouble("NZD");
-            double rub = ethJsonObject.getDouble("RUB");
-            double sar = ethJsonObject.getDouble("SAR");
-            double sek = ethJsonObject.getDouble("SEK");
-            double sgd = ethJsonObject.getDouble("SGD");
-            double atry = ethJsonObject.getDouble("TRY");
-            double usd = ethJsonObject.getDouble("USD");
-
-
-            //get BTC conversion Rates
-            JSONObject btcJsonObject = jsonObject.getJSONObject("BTC");
-            double aud1 = btcJsonObject.getDouble("AUD");
-            double cad1 = btcJsonObject.getDouble("CAD");
-            double chf1 = btcJsonObject.getDouble("CHF");
-            double cny1 = btcJsonObject.getDouble("CNY");
-            double dkk1 = btcJsonObject.getDouble("DKK");
-            double eur1 = btcJsonObject.getDouble("EUR");
-            double gbp1 = btcJsonObject.getDouble("GBP");
-            double inr1 = btcJsonObject.getDouble("INR");
-            double jpy1 = btcJsonObject.getDouble("JPY");
-            double krw1 = btcJsonObject.getDouble("KRW");
-            double mxn1 = btcJsonObject.getDouble("MXN");
-            double ngn1 = btcJsonObject.getDouble("NGN");
-            double nok1 = btcJsonObject.getDouble("NOK");
-            double nzd1 = btcJsonObject.getDouble("NZD");
-            double rub1 = btcJsonObject.getDouble("RUB");
-            double sar1 = btcJsonObject.getDouble("SAR");
-            double sek1 = btcJsonObject.getDouble("SEK");
-            double sgd1 = btcJsonObject.getDouble("SGD");
-            double try1 = btcJsonObject.getDouble("TRY");
-            double usd1 = btcJsonObject.getDouble("USD");
-
-            //content value object to insert the fetched data to the database
-            ContentValues ethContentValues = new ContentValues();
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOAUD, aud);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOCAD, cad);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOCHF, chf);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOCNY, cny);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTODKK, dkk);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOEUR, eur);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOGBP, gbp);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOINR, inr);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOJPY, jpy);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOKRW, krw);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOMXN, mxn);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTONGN, ngn);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTONOK, nok);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTONZD, nzd);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTORUB, rub);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOSAR, sar);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOSEK, sek);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOSGD, sgd);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOTRY, atry);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOUSD, usd);
-            ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTIMESTAMP, currentTime);
-
-
-            //content value object to insert the fetched data to the database
-            ContentValues btcContentValues = new ContentValues();
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOAUD, aud1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOCAD, cad1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOCHF, chf1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOCNY, cny1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTODKK, dkk1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOEUR, eur1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOGBP, gbp1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOINR, inr1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOJPY, jpy1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOKRW, krw1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOMXN, mxn1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTONGN, ngn1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTONOK, nok1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTONZD, nzd1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTORUB, rub1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOSAR, sar1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOSEK, sek1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOSGD, sgd1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOTRY, try1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOUSD, usd1);
-            btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTIMESTAMP, currentTime);
-
-
-            //test
-            long table2_rowId = db.insert(CurrencyContract.CurrencyEntry.TABLE2_NAME, null, ethContentValues);
-            Toast.makeText(MainActivity.this, "inserted in table 2 with Row id: " + table2_rowId, Toast.LENGTH_LONG).show();
-
-            //test
-            long table1_rowId = db.insert(CurrencyContract.CurrencyEntry.TABLE1_NAME, null, btcContentValues);
-            Toast.makeText(MainActivity.this, "inserted in table 1 with Row id: " + table1_rowId, Toast.LENGTH_LONG).show();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     @Override
     public void onListItemClick(String cryptoName, String currencyName, double currencyValue) {
-        //test
-        if (mToast != null) {
-            mToast.cancel();
-        }
-        String message = "Crypto Name:" + cryptoName + " \nCurrency Name: " + currencyName + "\nCurrency Value: " + currencyValue;
-        mToast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG);
-        mToast.show();
         //passes data to the next activity
         Intent convertIntent = new Intent(MainActivity.this, ConvertCurrency.class);
         convertIntent.putExtra("cryptoName", cryptoName);
