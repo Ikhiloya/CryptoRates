@@ -32,8 +32,10 @@ _ _ _
 #### Contextual Action Mode
 ![contextual_action_mode](https://user-images.githubusercontent.com/28486520/32415634-03eac568-c23d-11e7-90c4-19f260fc5dd6.png)
 
+#### Delete Dialog
+![delete_dialog](https://user-images.githubusercontent.com/28486520/32415637-04eaf9d8-c23d-11e7-99e5-0dda678e6f4b.png)
+
 #### Overflow Menu
 ![overflow_menu](https://user-images.githubusercontent.com/28486520/32415632-eb9ec586-c23c-11e7-8e43-7faf448d5f8f.png)
 
-#### Delete Dialog
-![delete_dialog](https://user-images.githubusercontent.com/28486520/32415637-04eaf9d8-c23d-11e7-99e5-0dda678e6f4b.png)
+
