@@ -13,3 +13,9 @@ _ _ _
 ## License and copyright
 
 © Ikhiloya Imokhai
+
+_ _ _
+## App Screenshots
+
+#### Empty State Screen
+![empty_state_screen](https://user-images.githubusercontent.com/28486520/32415543-9c8f803a-c23b-11e7-8dc6-774950b78c03.png)
