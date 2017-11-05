@@ -16,10 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="16dp">
+            android:paddingBottom="@dimen/padding_bottom"
+            android:paddingLeft="@dimen/padding_left"
+            android:paddingRight="@dimen/padding_right"
+            android:paddingTop="@dimen/padding_top">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/input_outline"
                     android:gravity="center"
-                    android:hint="BTC"
+                    android:hint="@string/btc"
                     android:inputType="number"
                     android:maxLines="1"
                     android:padding="8dp" />
@@ -47,7 +47,7 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:padding="8dp"
-                    tools:hint="USD" />
+                    tools:hint="@string/usd" />
 
                 <Button
                     android:id="@+id/convertButton"
@@ -56,7 +56,7 @@
                     android:layout_marginTop="50dp"
                     android:background="@color/colorAccent"
                     android:padding="15dp"
-                    android:text="Convert"
+                    android:text="@string/convert"
                     android:textColor="#eee"
                     android:textSize="15sp" />
             </LinearLayout>

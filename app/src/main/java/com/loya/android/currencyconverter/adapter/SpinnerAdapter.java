@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Ikhiloya on 10/28/2017.
+ * An adapter class to populate the spinner
  */
 
 public class SpinnerAdapter extends BaseAdapter {

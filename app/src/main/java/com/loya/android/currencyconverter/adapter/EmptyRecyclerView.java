@@ -6,11 +6,12 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Created by user on 11/3/2017.
+ * Created by Ikhiloya on 11/3/2017.
+ * A class that handles empty view state in the Recycler view
  */
 
 public class EmptyRecyclerView extends RecyclerView {
-
+    //emptyView variable
     private View emptyView;
 
     final private AdapterDataObserver observer = new AdapterDataObserver() {

@@ -6,12 +6,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
+import com.loya.android.currencyconverter.R;
 import com.loya.android.currencyconverter.data.CurrencyContract;
 import com.loya.android.currencyconverter.data.CurrencyDbHelper;
 
 /**
  * Created by Ikhiloya on 10/31/2017.
- * This Class uses AsyncTask loader to load user's selection from the background to the recycler view on the UI thread
+ * This Class uses AsyncTask loader to load user's selection from the background to the populate
+ * the recycler view on the UI thread
  */
 
 public class CursorLoader extends AsyncTaskLoader<Cursor> {
@@ -20,9 +22,8 @@ public class CursorLoader extends AsyncTaskLoader<Cursor> {
      */
     private final String LOG_TAG = CursorLoader.class.getName();
 
-
+    //variables
     private Context context;
-
     private CurrencyDbHelper mDbHelper;
 
     /**
@@ -33,7 +34,6 @@ public class CursorLoader extends AsyncTaskLoader<Cursor> {
         super(context);
         this.context = context;
         this.mDbHelper = mDbHelper;
-
     }
 
     // Initialize a Cursor, this will hold all the task data
@@ -73,17 +73,16 @@ public class CursorLoader extends AsyncTaskLoader<Cursor> {
                     null,                //don't filter the row groups
                     null);               //The sort order
         } catch (Exception e) {
-            Log.e("TAG", "Failed to asynchronously load data.");
+            Log.e(LOG_TAG, context.getString(R.string.failed_to_load_data_asynchronously));
             e.printStackTrace();
             return null;
         }
     }
 
-    // deliverResult sends the result of the load, a Cursor, to the registered listener
+    //this method sends the result of the load, a Cursor, to the registered listener
     public void deliverResult(Cursor data) {
         cursor = data;
         super.deliverResult(data);
     }
-
 }
 

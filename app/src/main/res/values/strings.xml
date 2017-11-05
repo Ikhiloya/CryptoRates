@@ -8,9 +8,9 @@
     <string name="dummy_val">10000000</string>
     <string name="bitcoin">Bitcoin</string>
     <string name="ethereum">Ethereum</string>
-    <string name="in_onStartLoading">in onSTartLoading</string>
+    <string name="in_onStartLoading">in onStartLoading</string>
     <string name="in_LoadInBackground">in loadInBackground</string>
-    <string name="delete_all_cards">Delete all cards</string>
+    <string name="delete_all_cards">Delete all cards?</string>
     <string name="entries_deleted">Cards deleted</string>
     <string name="cards_deleted">cards deleted.</string>
     <string name="card_deleted">card deleted.</string>
@@ -23,4 +23,11 @@
     <string name="tap_to_add_one">Tap + to add one</string>
     <string name="do_ensure_you_have_an_active_internet_connection">Do ensure you have an active internet connection</string>
     <string name="no_internet_connection">No Internet Connection</string>
+    <string name="failed_to_load_data_asynchronously">Failed to asynchronously load data.</string>
+    <string name="convert">Convert</string>
+    <string name="usd">USD</string>
+    <string name="btc">BTC</string>
+    <string name="ok">OK</string>
+    <string name="time_stamp">20/10/2017 at 9:15 PM</string>
+    <string name="demo">Demo</string>
 </resources>

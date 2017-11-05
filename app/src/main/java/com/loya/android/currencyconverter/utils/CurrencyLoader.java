@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 /**
  * Loads a JSONObject that contains currency conversion rates  by using an AsyncTask to perform the
- * network request to the given URL from Cryptocompare API.
+ * network request to the given URL from CryptoCompare API.
  */
 public class CurrencyLoader extends AsyncTaskLoader<JSONObject> {
     /**
@@ -33,7 +33,6 @@ public class CurrencyLoader extends AsyncTaskLoader<JSONObject> {
      * @param context of the activity
      * @param url     to load data from
      */
-
     public CurrencyLoader(Context context, String url) {
         super(context);
         mUrl = url;
@@ -43,6 +42,7 @@ public class CurrencyLoader extends AsyncTaskLoader<JSONObject> {
     protected void onStartLoading() {
         super.onStartLoading();
         Log.v(LOG_TAG, this.getContext().getString(R.string.in_onStartLoading));
+        //force a new load
         forceLoad();
     }
 

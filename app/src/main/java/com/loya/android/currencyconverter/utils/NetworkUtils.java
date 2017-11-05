@@ -30,7 +30,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-/**Created by Ikhiloya
+/**
+ * Created by Ikhiloya
  * Utility class with methods to help perform the HTTP request and
  * parse the response.
  */
@@ -42,7 +43,7 @@ public final class NetworkUtils {
     public static final String LOG_TAG = NetworkUtils.class.getSimpleName();
 
     /**
-     * Query the cryptocompare dataset and return an {@link } object to represent a list of exchange rates.
+     * Query the cryptoCompare api and return a Json object that contains current exchange rates.
      */
     public static JSONObject fetchJsonData(String requestUrl) {
         // Create URL object
@@ -59,7 +60,7 @@ public final class NetworkUtils {
         // Extract relevant fields from the JSON response and create a new JsonObect object
         JSONObject jsonObject = extractFeatureFromJson(jsonResponse);
 
-        // Return the {@link Event}
+        // Return the JsonObject
         return jsonObject;
     }
 

@@ -12,32 +12,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.loya.android.currencyconverter.R;
-import com.loya.android.currencyconverter.utils.Helper;
 import com.loya.android.currencyconverter.data.CurrencyContract;
-
-import java.util.List;
+import com.loya.android.currencyconverter.utils.Helper;
 
 /**
  * Created by Ikhiloya on 10/11/2017.
+ * An adapter class used to display cards on the recycler view
  */
 
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHolder> {
+    //init variables
     private Context context;
     private Cursor cursor;
-    private String val;
-    private SparseBooleanArray mSelectedItemsIds;//
-
-
-    private List<String> stringList;
-
+    private SparseBooleanArray mSelectedItemsIds;
     final private ListItemClickListener mOnclickListener;
 
-
+    /**
+     * an interface to handle click events on a card
+     */
     public interface ListItemClickListener {
         void onListItemClick(String cryptoName, String currencyName, double currencyValue);
-
     }
-
 
     public CurrencyAdapter(Context context, Cursor cursor, ListItemClickListener mOnclickListener) {
         this.context = context;

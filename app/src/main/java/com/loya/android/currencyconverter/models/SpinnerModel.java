@@ -2,6 +2,8 @@ package com.loya.android.currencyconverter.models;
 
 /**
  * Created by Ikhiloya on 10/30/2017.
+ * <p>
+ * A model class to populate the spinners
  */
 
 public class SpinnerModel {
@@ -17,15 +19,8 @@ public class SpinnerModel {
         return codes;
     }
 
-    public void setCodes(String codes) {
-        this.codes = codes;
-    }
-
     public int getFlags() {
         return flags;
     }
 
-    public void setFlags(int flags) {
-        this.flags = flags;
-    }
 }

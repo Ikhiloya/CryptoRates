@@ -6,10 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Created by Ikhiloya on 10/10/2017.
+ * A database helper class to be used to set up the database
  */
 
 public class CurrencyDbHelper extends SQLiteOpenHelper {
-
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + CurrencyContract.CurrencyEntry.TABLE1_NAME;
     private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + CurrencyContract.CurrencyEntry.TABLE2_NAME;
@@ -31,8 +31,7 @@ public class CurrencyDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //CREATE TABLE pets (id INTEGER PRIMARY KEY, name TEXT, weight INTEGER);
-        //create a String that contains the SQL Entries
+        //create a String that contains the SQL Entries for table 1
         String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + CurrencyContract.CurrencyEntry.TABLE1_NAME + "("
                         + CurrencyContract.CurrencyEntry.BTC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -59,7 +58,7 @@ public class CurrencyDbHelper extends SQLiteOpenHelper {
                         + CurrencyContract.CurrencyEntry.COLUMN_BTCTIMESTAMP + " TEXT NOT NULL);";
 
 
-
+        //create a String that contains the SQL Entries for table 2
         String SQL_CREATE_ENTRIES2 =
                 "CREATE TABLE " + CurrencyContract.CurrencyEntry.TABLE2_NAME + "("
                         + CurrencyContract.CurrencyEntry.ETH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -85,6 +84,7 @@ public class CurrencyDbHelper extends SQLiteOpenHelper {
                         + CurrencyContract.CurrencyEntry.COLUMN_ETHTOUSD + " REAL NOT NULL, "
                         + CurrencyContract.CurrencyEntry.COLUMN_ETHTIMESTAMP + " TEXT NOT NULL);";
 
+        //create a String that contains the SQL Entries for table 3
         String SQL_CREATE_ENTRIES3 =
                 "CREATE TABLE " + CurrencyContract.CurrencyEntry.TABLE3_NAME + "("
                         + CurrencyContract.CurrencyEntry.USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -93,10 +93,10 @@ public class CurrencyDbHelper extends SQLiteOpenHelper {
                         + CurrencyContract.CurrencyEntry.COLUMN_CURRENCY_VALUE + " REAL NOT NULL, "
                         + CurrencyContract.CurrencyEntry.COLUMN_TIMESTAMP + " TEXT NOT NULL);";
 
+        //execute sql
         db.execSQL(SQL_CREATE_ENTRIES);
         db.execSQL(SQL_CREATE_ENTRIES2);
         db.execSQL(SQL_CREATE_ENTRIES3);
-
     }
 
     @Override
@@ -109,6 +109,4 @@ public class CurrencyDbHelper extends SQLiteOpenHelper {
         onCreate(db);
 
     }
-
-
 }

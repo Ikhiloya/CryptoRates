@@ -12,10 +12,12 @@ import com.loya.android.currencyconverter.adapter.CurrencyAdapter;
 
 /**
  * Created by Ikhiloya on 11/1/2017.
+ * <p>
+ * A class that handles the contextual action mode
  */
 
 public class Toolbar_ActionMode_Callback implements android.support.v7.view.ActionMode.Callback {
-    private  Context context;
+    private Context context;
     private CurrencyAdapter currencyAdapter;
 
     public Toolbar_ActionMode_Callback(Context context, CurrencyAdapter currencyAdapter) {
@@ -34,7 +36,7 @@ public class Toolbar_ActionMode_Callback implements android.support.v7.view.Acti
         //Sometimes the meu will not be visible so for that we need to set their visibility manually in this method
         //So here show action menu according to SDK Levels
 
-            menu.findItem(R.id.action_delete).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.findItem(R.id.action_delete).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
     }
 
@@ -42,7 +44,7 @@ public class Toolbar_ActionMode_Callback implements android.support.v7.view.Acti
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete:
-                MainActivity mainActivity =  (MainActivity)context;
+                MainActivity mainActivity = (MainActivity) context;
                 mainActivity.deleteRows();//delete selected rows
                 break;
         }
@@ -54,8 +56,8 @@ public class Toolbar_ActionMode_Callback implements android.support.v7.view.Acti
         //When action mode destroyed remove selected selections and set action mode to null
         //First check current fragment action mode
         currencyAdapter.removeSelection();  // remove selection
-        MainActivity mainActivity =  (MainActivity)context;
-            mainActivity.setNullToActionMode();//Set action mode null
+        MainActivity mainActivity = (MainActivity) context;
+        mainActivity.setNullToActionMode();//Set action mode null
     }
 }
 

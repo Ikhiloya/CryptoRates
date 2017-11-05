@@ -4,6 +4,7 @@ import android.provider.BaseColumns;
 
 /**
  * Created by Ikhiloya on 10/10/2017.
+ * A contract class for the database
  */
 
 public final class CurrencyContract {
@@ -13,8 +14,6 @@ public final class CurrencyContract {
     }
 
     public static final class CurrencyEntry implements BaseColumns {
-
-
 
         //constants for table 1
         public static final String TABLE1_NAME = "btcconvert";
@@ -70,8 +69,7 @@ public final class CurrencyContract {
         public static final String COLUMN_ETHTIMESTAMP = "ethtimestamp";
 
 
-        //USER TABLE
-
+        //A table to handle user's selection
         public static final String TABLE3_NAME = "user";
         public static final String USER_ID = BaseColumns._ID;
 
@@ -79,7 +77,6 @@ public final class CurrencyContract {
         public static final String COLUMN_CURRENCY_NAME = "currencyname";
         public static final String COLUMN_CURRENCY_VALUE = "currencyvalue";
         public static final String COLUMN_TIMESTAMP = "timestamp";
-
 
     }
 

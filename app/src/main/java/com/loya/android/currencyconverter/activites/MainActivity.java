@@ -253,7 +253,6 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
             isRefresh = true; //set to true before restarting the loader
             //restart the loader to get current exchange rates from cryptoCompare API
             getSupportLoaderManager().restartLoader(CURRENCY_LOADER_ID, null, currencyLoaderCallbacks);
-            //isRefresh = false; //set to false after restarting the loader
             return true;
         } else if (id == R.id.action_delete_all_cards) {
             if (mCurrencyAdapter.getItemCount() > 0) {
@@ -280,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         //  and click listeners for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (selected.size() > 1) {
-            builder.setMessage(getString((R.string.delete)) + " " + selected.size() + getString(R.string.cards));
+            builder.setMessage(getString((R.string.delete)) + " " + selected.size() + " " +getString(R.string.cards));
         } else {
             builder.setMessage(getString(R.string.delete_this_card));
         }
@@ -383,10 +382,16 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         startActivity(convertIntent);
     }
 
+    /**
+     * shows the progress bar
+     */
     private void showLoading() {
         loadingIndicator.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * dismisses the progress bar
+     */
     private void dismissLoading() {
         loadingIndicator.setVisibility(View.GONE);
     }

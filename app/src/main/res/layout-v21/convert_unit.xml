@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="120dp"
@@ -33,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@mipmap/btc" />
+                    tools:src="@mipmap/btc" />
 
                 <TextView
                     android:id="@+id/crypto_name"
@@ -57,20 +56,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
-                    android:text="@string/dummy_val"
                     android:textColor="#616161"
                     android:textSize="23sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="@string/dummy_val" />
 
                 <TextView
                     android:id="@+id/currency_unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
-                    android:text="@string/dummy_currency_unit"
                     android:textColor="#616161"
                     android:textSize="23sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="@string/dummy_currency_unit" />
 
             </LinearLayout>
 
@@ -78,14 +77,10 @@
                 android:id="@+id/current_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/time_stamp"
                 android:textColor="@color/colorAccent"
-                android:textSize="12sp" />
-
-
+                android:textSize="12sp"
+                tools:text="@string/time_stamp" />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
-
-
 </android.support.design.widget.CoordinatorLayout>

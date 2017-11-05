@@ -7,21 +7,16 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.loya.android.currencyconverter.R;
 import com.loya.android.currencyconverter.utils.Helper;
 
 public class ConvertCurrency extends AppCompatActivity {
-    private String message;
-
+    //variables
     private EditText cryptoTextField;
     private EditText currencyTextField;
-
     private Button convertButton;
-
     private String cryptoName, currencyName;
-
     private double currencyValue;
     private int cryptoIcon;
     private int currencyIcon;
@@ -35,7 +30,6 @@ public class ConvertCurrency extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         //init views
         cryptoTextField = (EditText) findViewById(R.id.cryptoField);
@@ -71,8 +65,6 @@ public class ConvertCurrency extends AppCompatActivity {
      * method to convert from crypto to currency and vice versa
      */
     private void convert() {
-        message = cryptoName + " " + currencyName + " " + currencyValue;
-        Toast.makeText(ConvertCurrency.this, message, Toast.LENGTH_LONG).show();
         String cryptoVal = cryptoTextField.getText().toString().trim();
         String currencyVal = currencyTextField.getText().toString().trim();
 
@@ -92,7 +84,6 @@ public class ConvertCurrency extends AppCompatActivity {
      */
     private void convertToCurrency(double cryptoVal) {
         double result = cryptoVal * currencyValue;
-
         currencyTextField.setText(String.valueOf(result));
     }
 

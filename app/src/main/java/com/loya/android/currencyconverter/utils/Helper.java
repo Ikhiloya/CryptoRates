@@ -3,7 +3,6 @@ package com.loya.android.currencyconverter.utils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
 import com.loya.android.currencyconverter.R;
 import com.loya.android.currencyconverter.data.CurrencyContract;
@@ -23,7 +22,6 @@ import java.util.Date;
 public class Helper {
     private static int flag;
     private static CurrencyDbHelper mDbHelper;
-
 
     /**
      * @param cryptoName the name of the crypto currency selected by the user
@@ -134,7 +132,6 @@ public class Helper {
         String timeText = time.format(dateObject);
         String currentDate = dateText + " at " + timeText;
         return currentDate;
-
     }
 
     /**
@@ -223,7 +220,6 @@ public class Helper {
             ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTOUSD, usd);
             ethContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_ETHTIMESTAMP, currentTime);
 
-
             //content value object to insert the fetched data to the database
             ContentValues btcContentValues = new ContentValues();
             btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOAUD, aud1);
@@ -248,18 +244,11 @@ public class Helper {
             btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTOUSD, usd1);
             btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTIMESTAMP, currentTime);
 
-
-            //test
-            long table2_rowId = db.insert(CurrencyContract.CurrencyEntry.TABLE2_NAME, null, ethContentValues);
-            Toast.makeText(context, "inserted in table 2 with Row id: " + table2_rowId, Toast.LENGTH_LONG).show();
-
-            //test
+            //insert into tables
             long table1_rowId = db.insert(CurrencyContract.CurrencyEntry.TABLE1_NAME, null, btcContentValues);
-            Toast.makeText(context, "inserted in table 1 with Row id: " + table1_rowId, Toast.LENGTH_LONG).show();
-
+            long table2_rowId = db.insert(CurrencyContract.CurrencyEntry.TABLE2_NAME, null, ethContentValues);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 }

@@ -13,8 +13,7 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    <!-- Added an empty view which will be shown when the EmptyRecyclerView
-           is empty -->
+    <!-- Added an empty view which will be shown when the EmptyRecyclerView is empty -->
     <RelativeLayout
         android:id="@+id/todo_list_empty_view"
         android:layout_width="match_parent"
