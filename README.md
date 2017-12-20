@@ -4,7 +4,20 @@
 This app shows the current crypto currencies(Bitcoin and Ethereum) conversion rates to twenty(20) of the world's currencies including the Naira as part of the Andela Learning Community Intermediate Track 2.0 Challenge.
 
 _ _ _
+## App Features
+- Empty Recycler View
+- HttpURL Network Calls (No External Libraries)
+- AsyncTask Loader
+- Saving JSON data to SQLite Database
+- Offline Caching using SQLite
+- Create, Read and Delete from SQLite
+- Multiple LoaderCallbacks
+- Accessing Network State
+- Recycler View, Adapter and OnclickListener
+- Contextual Action Mode
+- Custom Spinner
 
+_ _ _
 ## Contributors
 - Ikhiloya Imokhai <imokhaiikhiloya@gmail.com>
 
