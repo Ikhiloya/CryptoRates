@@ -121,7 +121,7 @@ public class CustomCurrency extends AppCompatActivity {
             };
             // Perform  query on eth table
             Cursor cursor = db.query(
-                    CurrencyContract.CurrencyEntry.TABLE2_NAME, //The table to query
+                    CurrencyContract.CurrencyEntry.ETH_TO_OTHER, //The table to query
                     projection,          //The column to return
                     null,                //The column for the WHERE clause
                     null,                //The values for the WHERE clause
@@ -159,7 +159,7 @@ public class CustomCurrency extends AppCompatActivity {
             };
             // Perform  query on BTC table
             Cursor cursor = db.query(
-                    CurrencyContract.CurrencyEntry.TABLE1_NAME, //The table to query
+                    CurrencyContract.CurrencyEntry.BTC_TO_OTHER, //The table to query
                     projection,          //The column to return
                     null,                //The column for the WHERE clause
                     null,                //The values for the WHERE clause
@@ -255,7 +255,7 @@ public class CustomCurrency extends AppCompatActivity {
         values.put(CurrencyContract.CurrencyEntry.COLUMN_CURRENCY_VALUE, value);
         values.put(CurrencyContract.CurrencyEntry.COLUMN_TIMESTAMP, currentTime);
         //insert into db
-        long rowId = db.insert(CurrencyContract.CurrencyEntry.TABLE3_NAME, null, values);
+        long rowId = db.insert(CurrencyContract.CurrencyEntry.USER_SELECTION, null, values);
     }
 
     /**
@@ -273,7 +273,7 @@ public class CustomCurrency extends AppCompatActivity {
         };
         // Perform  query on USER table
         Cursor cursor = db.query(
-                CurrencyContract.CurrencyEntry.TABLE3_NAME, //The table to query
+                CurrencyContract.CurrencyEntry.USER_SELECTION, //The table to query
                 projection,          //The column to return
                 null,                //The column for the WHERE clause
                 null,                //The values for the WHERE clause

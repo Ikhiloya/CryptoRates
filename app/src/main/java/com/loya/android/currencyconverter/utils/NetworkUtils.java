@@ -46,6 +46,8 @@ public final class NetworkUtils {
      * Query the cryptoCompare api and return a Json object that contains current exchange rates.
      */
     public static JSONObject fetchJsonData(String requestUrl) {
+        Log.i(LOG_TAG, "fetching json data");
+
         // Create URL object
         URL url = createUrl(requestUrl);
 
@@ -82,6 +84,7 @@ public final class NetworkUtils {
      */
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
+        Log.i(LOG_TAG, "making http request");
 
         // If the URL is null, then return early.
         if (url == null) {

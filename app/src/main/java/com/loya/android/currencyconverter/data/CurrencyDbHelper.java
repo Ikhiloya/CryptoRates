@@ -11,13 +11,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class CurrencyDbHelper extends SQLiteOpenHelper {
 
-    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + CurrencyContract.CurrencyEntry.TABLE1_NAME;
-    private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + CurrencyContract.CurrencyEntry.TABLE2_NAME;
-    private static final String SQL_DELETE_ENTRIES3 = "DROP TABLE IF EXISTS " + CurrencyContract.CurrencyEntry.TABLE3_NAME;
+    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + CurrencyContract.CurrencyEntry.BTC_TO_OTHER;
+    private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + CurrencyContract.CurrencyEntry.ETH_TO_OTHER;
+    private static final String SQL_DELETE_ENTRIES3 = "DROP TABLE IF EXISTS " + CurrencyContract.CurrencyEntry.USER_SELECTION;
 
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
 
     /**
      * name of the Database file
@@ -32,8 +32,8 @@ public class CurrencyDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //create a String that contains the SQL Entries for table 1
-        String SQL_CREATE_ENTRIES =
-                "CREATE TABLE " + CurrencyContract.CurrencyEntry.TABLE1_NAME + "("
+        String SQL_CREATE_ENTRIES_BTC_TO_OTHER =
+                "CREATE TABLE " + CurrencyContract.CurrencyEntry.BTC_TO_OTHER + "("
                         + CurrencyContract.CurrencyEntry.BTC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + CurrencyContract.CurrencyEntry.COLUMN_BTCTOAUD + " REAL NOT NULL, "
                         + CurrencyContract.CurrencyEntry.COLUMN_BTCTOCAD + " REAL NOT NULL, "
@@ -59,8 +59,8 @@ public class CurrencyDbHelper extends SQLiteOpenHelper {
 
 
         //create a String that contains the SQL Entries for table 2
-        String SQL_CREATE_ENTRIES2 =
-                "CREATE TABLE " + CurrencyContract.CurrencyEntry.TABLE2_NAME + "("
+        String SQL_CREATE_ENTRIES_ETH_TO_OTHER =
+                "CREATE TABLE " + CurrencyContract.CurrencyEntry.ETH_TO_OTHER + "("
                         + CurrencyContract.CurrencyEntry.ETH_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + CurrencyContract.CurrencyEntry.COLUMN_ETHTOAUD + " REAL NOT NULL, "
                         + CurrencyContract.CurrencyEntry.COLUMN_ETHTOCAD + " REAL NOT NULL, "
@@ -85,8 +85,8 @@ public class CurrencyDbHelper extends SQLiteOpenHelper {
                         + CurrencyContract.CurrencyEntry.COLUMN_ETHTIMESTAMP + " TEXT NOT NULL);";
 
         //create a String that contains the SQL Entries for table 3
-        String SQL_CREATE_ENTRIES3 =
-                "CREATE TABLE " + CurrencyContract.CurrencyEntry.TABLE3_NAME + "("
+        String SQL_CREATE_ENTRIES_USER_SELECTION =
+                "CREATE TABLE " + CurrencyContract.CurrencyEntry.USER_SELECTION + "("
                         + CurrencyContract.CurrencyEntry.USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME + " TEXT NOT NULL, "
                         + CurrencyContract.CurrencyEntry.COLUMN_CURRENCY_NAME + " TEXT NOT NULL, "
@@ -94,9 +94,9 @@ public class CurrencyDbHelper extends SQLiteOpenHelper {
                         + CurrencyContract.CurrencyEntry.COLUMN_TIMESTAMP + " TEXT NOT NULL);";
 
         //execute sql
-        db.execSQL(SQL_CREATE_ENTRIES);
-        db.execSQL(SQL_CREATE_ENTRIES2);
-        db.execSQL(SQL_CREATE_ENTRIES3);
+        db.execSQL(SQL_CREATE_ENTRIES_BTC_TO_OTHER);
+        db.execSQL(SQL_CREATE_ENTRIES_ETH_TO_OTHER);
+        db.execSQL(SQL_CREATE_ENTRIES_USER_SELECTION);
     }
 
     @Override

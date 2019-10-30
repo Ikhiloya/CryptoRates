@@ -9,9 +9,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -22,7 +26,6 @@ import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.loya.android.currencyconverter.R;
 import com.loya.android.currencyconverter.adapter.CurrencyAdapter;
@@ -31,6 +34,7 @@ import com.loya.android.currencyconverter.data.CurrencyContract;
 import com.loya.android.currencyconverter.data.CurrencyDbHelper;
 import com.loya.android.currencyconverter.listeners.RecyclerClickListener;
 import com.loya.android.currencyconverter.listeners.RecyclerTouchListener;
+import com.loya.android.currencyconverter.utils.Constant;
 import com.loya.android.currencyconverter.utils.CurrencyLoader;
 import com.loya.android.currencyconverter.utils.CursorLoader;
 import com.loya.android.currencyconverter.utils.Helper;
@@ -39,12 +43,10 @@ import com.loya.android.currencyconverter.utils.Toolbar_ActionMode_Callback;
 import org.json.JSONObject;
 
 
-public class MainActivity extends AppCompatActivity implements CurrencyAdapter.ListItemClickListener {
+public class MainActivity extends AppCompatActivity implements CurrencyAdapter.ListItemClickListener, SwipeRefreshLayout.OnRefreshListener {
     private CurrencyDbHelper mDbHelper;
 
     private String currentTime;
-
-    private static final String REQUEST_URL = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH,BTC&tsyms=AUD,CAD,CHF,CNY,DKK,EUR,GBP,INR,JPY,KRW,MXN,NGN,NOK,NZD,RUB,SAR,SEK,SGD,TRY,USD";
 
     //LoaderManager.LoaderCallbacks objects to be used for background tasks
     private LoaderManager.LoaderCallbacks<Cursor> cursorLoaderCallbacks;
@@ -54,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
     private CurrencyAdapter mCurrencyAdapter;
     //EmptyRecyclerView  variable
     private EmptyRecyclerView mRecycler;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     //integer Loader constant for the loader, could be any integer
     private static final int DB_LOADER_ID = 0;
@@ -72,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
     private boolean isConnected;
     private boolean isRefresh;
 
+    private Snackbar messageSnackbar;
+    private CoordinatorLayout mLayout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +89,10 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         setSupportActionBar(toolbar);
 
         isRefresh = false;
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton addFab = (FloatingActionButton) findViewById(R.id.addFab);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+
 
         //get a reference to the loading indicator
         loadingIndicator = findViewById(R.id.loading_indicator);
@@ -105,10 +117,10 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         currencyLoaderCallbacks = new LoaderManager.LoaderCallbacks<JSONObject>() {
             @Override
             public Loader<JSONObject> onCreateLoader(int id, Bundle args) {
-                if (isRefresh == true) {
+                if (isRefresh) {
                     showLoading();
                 }
-                return new CurrencyLoader(MainActivity.this, REQUEST_URL);
+                return new CurrencyLoader(MainActivity.this, Constant.BASE_URL);
             }
 
             @Override
@@ -118,11 +130,14 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
                 dismissLoading();
                 // If there is no result, do nothing.
                 if (data == null) {
-                    Toast.makeText(MainActivity.this, R.string.could_not_get_exchange_rate, Toast.LENGTH_LONG).show();
+                    showMessage(R.string.could_not_get_exchange_rate);
+                    mSwipeRefreshLayout.setRefreshing(false);
                     return;
                 }
-                if (isRefresh == true) {
-                    Toast.makeText(MainActivity.this, R.string.current_exchange_rates_fetched_successfully, Toast.LENGTH_LONG).show();
+                if (isRefresh) {
+                    showMessage(R.string.current_exchange_rates_fetched_successfully);
+
+                    mSwipeRefreshLayout.setRefreshing(false);
                 }
                 //sends the JSONObject to update the database with the current rates
                 Helper.updateDatabase(data, MainActivity.this, currentTime);
@@ -144,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
             getSupportLoaderManager().initLoader(CURRENCY_LOADER_ID, null, currencyLoaderCallbacks);
         } else {
             loadingIndicator.setVisibility(View.GONE);
-            Toast.makeText(MainActivity.this, R.string.no_internet_connection, Toast.LENGTH_LONG).show();
+            showMessage(R.string.no_internet_connection);
         }
 
         //creates an object of LoaderCallbacks so as to perform Loading operation on the database
@@ -174,13 +189,17 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         //implement the listeners to handle clicks and contextual action mode
         implementRecyclerViewClickListeners();
         //sets a click listener on the FAB
-        fab.setOnClickListener(new View.OnClickListener() {
+        addFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, CustomCurrency.class);
                 startActivity(intent);
             }
         });
+
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
+
     }
 
     //Implement item click and long click over recycler view
@@ -250,19 +269,23 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         int id = item.getItemId();
         // noinspection SimplifiableIfStatement
         if (id == R.id.action_get_current_rates) {
-            isRefresh = true; //set to true before restarting the loader
-            //restart the loader to get current exchange rates from cryptoCompare API
-            getSupportLoaderManager().restartLoader(CURRENCY_LOADER_ID, null, currencyLoaderCallbacks);
+            getCurrentRates();
             return true;
         } else if (id == R.id.action_delete_all_cards) {
             if (mCurrencyAdapter.getItemCount() > 0) {
                 showDeleteConfirmationDialog();
             } else {
-                Toast.makeText(MainActivity.this, R.string.no_card_to_delete, Toast.LENGTH_LONG).show();
+                showMessage(R.string.no_card_to_delete);
             }
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getCurrentRates() {
+        isRefresh = true; //set to true before restarting the loader
+        //restart the loader to get current exchange rates from cryptoCompare API
+        getSupportLoaderManager().restartLoader(CURRENCY_LOADER_ID, null, currencyLoaderCallbacks);
     }
 
     //Delete selected rows
@@ -279,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         //  and click listeners for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (selected.size() > 1) {
-            builder.setMessage(getString((R.string.delete)) + " " + selected.size() + " " +getString(R.string.cards));
+            builder.setMessage(getString((R.string.delete)) + " " + selected.size() + " " + getString(R.string.cards));
         } else {
             builder.setMessage(getString(R.string.delete_this_card));
         }
@@ -295,9 +318,9 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
                     }
                 }
                 if (selected.size() > 1) {
-                    Toast.makeText(MainActivity.this, selected.size() + "  " + getString(R.string.cards_deleted), Toast.LENGTH_SHORT).show();//Show Toast
+                    showMessage(selected.size() + "  " + getString(R.string.cards_deleted));
                 } else {
-                    Toast.makeText(MainActivity.this, selected.size() + "  " + getString(R.string.card_deleted), Toast.LENGTH_SHORT).show();//Show Toast
+                    showMessage(selected.size() + "  " + getString(R.string.card_deleted));
                 }
                 mActionMode.finish();//Finish action mode after use
                 //restarts the loader so as to get current data
@@ -331,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Delete" button, so delete all cards.
                 deleteAll();
-                Toast.makeText(MainActivity.this, R.string.entries_deleted, Toast.LENGTH_LONG).show();
+                showMessage(R.string.entries_deleted);
                 getSupportLoaderManager().restartLoader(DB_LOADER_ID, null, cursorLoaderCallbacks);
             }
         });
@@ -361,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         // Specify arguments in placeholder order.
         String[] selectionArgs = {String.valueOf(id)};
         // Issue SQL statement.
-        db.delete(CurrencyContract.CurrencyEntry.TABLE3_NAME, selection, selectionArgs);
+        db.delete(CurrencyContract.CurrencyEntry.USER_SELECTION, selection, selectionArgs);
     }
 
     /**
@@ -369,16 +392,16 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
      */
     private void deleteAll() {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        db.delete(CurrencyContract.CurrencyEntry.TABLE3_NAME, null, null);
+        db.delete(CurrencyContract.CurrencyEntry.USER_SELECTION, null, null);
     }
 
     @Override
     public void onListItemClick(String cryptoName, String currencyName, double currencyValue) {
         //passes data to the next activity
         Intent convertIntent = new Intent(MainActivity.this, ConvertCurrency.class);
-        convertIntent.putExtra("cryptoName", cryptoName);
-        convertIntent.putExtra("currencyName", currencyName);
-        convertIntent.putExtra("currencyValue", currencyValue);
+        convertIntent.putExtra(Constant.CRYPTO_NAME, cryptoName);
+        convertIntent.putExtra(Constant.CURRENCY_NAME, currencyName);
+        convertIntent.putExtra(Constant.CURRENCY_VALUE, currencyValue);
         startActivity(convertIntent);
     }
 
@@ -394,5 +417,21 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
      */
     private void dismissLoading() {
         loadingIndicator.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onRefresh() {
+        getCurrentRates();
+    }
+
+
+    public void showMessage(@NonNull int res) {
+        messageSnackbar = Snackbar.make(mLayout, res, Snackbar.LENGTH_INDEFINITE);
+        messageSnackbar.show();
+    }
+
+    public void showMessage(@NonNull String title) {
+        messageSnackbar = Snackbar.make(mLayout, title, Snackbar.LENGTH_INDEFINITE);
+        messageSnackbar.show();
     }
 }

@@ -65,7 +65,7 @@ public class CursorLoader extends AsyncTaskLoader<Cursor> {
         // Perform  query on user table
         try {
             return db.query(
-                    CurrencyContract.CurrencyEntry.TABLE3_NAME, //The table to query
+                    CurrencyContract.CurrencyEntry.USER_SELECTION, //The table to query
                     projection,          //The column to return
                     null,                //The column for the WHERE clause
                     null,                //The values for the WHERE clause

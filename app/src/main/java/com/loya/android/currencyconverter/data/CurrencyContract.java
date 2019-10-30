@@ -16,7 +16,7 @@ public final class CurrencyContract {
     public static final class CurrencyEntry implements BaseColumns {
 
         //constants for table 1
-        public static final String TABLE1_NAME = "btcconvert";
+        public static final String BTC_TO_OTHER = "btc_to_other";
         public static final String BTC_ID = BaseColumns._ID;
         public static final String COLUMN_BTCTOAUD = "btctoaud";
         public static final String COLUMN_BTCTOCAD = "btctocad";
@@ -42,7 +42,7 @@ public final class CurrencyContract {
 
 
         //constants for table 2
-        public static final String TABLE2_NAME = "ethconvert";
+        public static final String ETH_TO_OTHER = "eth_to_other";
         public static final String ETH_ID = BaseColumns._ID;
 
         public static final String COLUMN_ETHTOAUD = "ethtoaud";
@@ -70,7 +70,7 @@ public final class CurrencyContract {
 
 
         //A table to handle user's selection
-        public static final String TABLE3_NAME = "user";
+        public static final String USER_SELECTION = "user";
         public static final String USER_ID = BaseColumns._ID;
 
         public static final String COLUMN_CRYPTO_NAME = "cyrptoname";

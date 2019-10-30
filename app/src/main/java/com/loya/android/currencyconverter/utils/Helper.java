@@ -3,6 +3,7 @@ package com.loya.android.currencyconverter.utils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.loya.android.currencyconverter.R;
 import com.loya.android.currencyconverter.data.CurrencyContract;
@@ -22,6 +23,8 @@ import java.util.Date;
 public class Helper {
     private static int flag;
     private static CurrencyDbHelper mDbHelper;
+
+    private static String LOG_TAG = Helper.class.getSimpleName();
 
     /**
      * @param cryptoName the name of the crypto currency selected by the user
@@ -147,8 +150,8 @@ public class Helper {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         //delete the existing currencies in the Database so as to have only current conversion rates in the Database
-        db.delete(CurrencyContract.CurrencyEntry.TABLE1_NAME, null, null);
-        db.delete(CurrencyContract.CurrencyEntry.TABLE2_NAME, null, null);
+        db.delete(CurrencyContract.CurrencyEntry.BTC_TO_OTHER, null, null);
+        db.delete(CurrencyContract.CurrencyEntry.ETH_TO_OTHER, null, null);
         try {
             //get ETH conversion Rates
             JSONObject ethJsonObject = jsonObject.getJSONObject("ETH");
@@ -245,9 +248,11 @@ public class Helper {
             btcContentValues.put(CurrencyContract.CurrencyEntry.COLUMN_BTCTIMESTAMP, currentTime);
 
             //insert into tables
-            long table1_rowId = db.insert(CurrencyContract.CurrencyEntry.TABLE1_NAME, null, btcContentValues);
-            long table2_rowId = db.insert(CurrencyContract.CurrencyEntry.TABLE2_NAME, null, ethContentValues);
+            long table1_rowId = db.insert(CurrencyContract.CurrencyEntry.BTC_TO_OTHER, null, btcContentValues);
+            long table2_rowId = db.insert(CurrencyContract.CurrencyEntry.ETH_TO_OTHER, null, ethContentValues);
+            Log.i(LOG_TAG, "Database update successful");
         } catch (JSONException e) {
+            Log.e(LOG_TAG, "Error updating database", e);
             e.printStackTrace();
         }
     }
