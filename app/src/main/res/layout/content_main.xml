@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.loya.android.currencyconverter.activites.MainActivity"
+    tools:context="com.ikhiloyaimokhai.currencyconverter.activites.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <com.loya.android.currencyconverter.adapter.EmptyRecyclerView
+    <com.ikhiloyaimokhai.currencyconverter.adapter.EmptyRecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

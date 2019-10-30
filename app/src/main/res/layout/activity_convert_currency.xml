@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.loya.android.currencyconverter.activites.ConvertCurrency">
+    tools:context="com.ikhiloyaimokhai.currencyconverter.activites.ConvertCurrency">
 
     <LinearLayout
         android:layout_width="match_parent"

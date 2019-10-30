@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.loya.android.currencyconverter.activites.MainActivity">
+    tools:context="com.ikhiloyaimokhai.currencyconverter.activites.MainActivity">
       <item
         android:id="@+id/action_get_current_rates"
         android:orderInCategory="100"

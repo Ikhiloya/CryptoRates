@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.loya.android.currencyconverter">
+    package="com.ikhiloyaimokhai.currencyconverter">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activites.MainActivity"
+            android:name="com.ikhiloyaimokhai.currencyconverter.activites.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,20 +24,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activites.CustomCurrency"
+            android:name="com.ikhiloyaimokhai.currencyconverter.activites.CustomCurrency"
             android:label="Selection"
-            android:parentActivityName=".activites.MainActivity">
+            android:parentActivityName="com.ikhiloyaimokhai.currencyconverter.activites.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.loya.android.currencyconverter.activites.MainActivity" />
+                android:value="com.ikhiloyaimokhai.currencyconverter.activites.MainActivity" />
         </activity>
         <activity
-            android:name=".activites.ConvertCurrency"
+            android:name="com.ikhiloyaimokhai.currencyconverter.activites.ConvertCurrency"
             android:label="Convert"
-            android:parentActivityName=".activites.MainActivity">
+            android:parentActivityName="com.ikhiloyaimokhai.currencyconverter.activites.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.loya.android.currencyconverter.activites.MainActivity" />
+                android:value="com.ikhiloyaimokhai.currencyconverter.activites.MainActivity" />
         </activity>
 
     </application>
