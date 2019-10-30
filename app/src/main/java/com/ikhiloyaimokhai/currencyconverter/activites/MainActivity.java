@@ -26,6 +26,7 @@ import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ikhiloyaimokhai.currencyconverter.R;
 import com.ikhiloyaimokhai.currencyconverter.adapter.CurrencyAdapter;
@@ -130,13 +131,12 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
                 dismissLoading();
                 // If there is no result, do nothing.
                 if (data == null) {
-                    showMessage(R.string.could_not_get_exchange_rate);
+                    Toast.makeText(MainActivity.this, R.string.could_not_get_exchange_rate, Toast.LENGTH_LONG).show();
                     mSwipeRefreshLayout.setRefreshing(false);
                     return;
                 }
                 if (isRefresh) {
-                    showMessage(R.string.current_exchange_rates_fetched_successfully);
-
+                    Toast.makeText(MainActivity.this, R.string.current_exchange_rates_fetched_successfully, Toast.LENGTH_LONG).show();
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
                 //sends the JSONObject to update the database with the current rates
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
             getSupportLoaderManager().initLoader(CURRENCY_LOADER_ID, null, currencyLoaderCallbacks);
         } else {
             loadingIndicator.setVisibility(View.GONE);
-            showMessage(R.string.no_internet_connection);
+            Toast.makeText(MainActivity.this, R.string.no_internet_connection, Toast.LENGTH_LONG).show();
         }
 
         //creates an object of LoaderCallbacks so as to perform Loading operation on the database
@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
             if (mCurrencyAdapter.getItemCount() > 0) {
                 showDeleteConfirmationDialog();
             } else {
-                showMessage(R.string.no_card_to_delete);
+                Toast.makeText(MainActivity.this, R.string.no_card_to_delete, Toast.LENGTH_LONG).show();
             }
             return true;
         }
@@ -318,9 +318,11 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
                     }
                 }
                 if (selected.size() > 1) {
-                    showMessage(selected.size() + "  " + getString(R.string.cards_deleted));
+                    Toast.makeText(MainActivity.this, selected.size() + "  " + getString(R.string.cards_deleted), Toast.LENGTH_SHORT).show();//Show Toast
+
                 } else {
-                    showMessage(selected.size() + "  " + getString(R.string.card_deleted));
+                    Toast.makeText(MainActivity.this, selected.size() + "  " + getString(R.string.card_deleted), Toast.LENGTH_SHORT).show();//Show Toast
+
                 }
                 mActionMode.finish();//Finish action mode after use
                 //restarts the loader so as to get current data
@@ -354,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Delete" button, so delete all cards.
                 deleteAll();
-                showMessage(R.string.entries_deleted);
+                Toast.makeText(MainActivity.this, R.string.entries_deleted, Toast.LENGTH_LONG).show();
                 getSupportLoaderManager().restartLoader(DB_LOADER_ID, null, cursorLoaderCallbacks);
             }
         });
@@ -424,14 +426,4 @@ public class MainActivity extends AppCompatActivity implements CurrencyAdapter.L
         getCurrentRates();
     }
 
-
-    public void showMessage(@NonNull int res) {
-        messageSnackbar = Snackbar.make(mLayout, res, Snackbar.LENGTH_INDEFINITE);
-        messageSnackbar.show();
-    }
-
-    public void showMessage(@NonNull String title) {
-        messageSnackbar = Snackbar.make(mLayout, title, Snackbar.LENGTH_INDEFINITE);
-        messageSnackbar.show();
-    }
 }
