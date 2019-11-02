@@ -22,7 +22,11 @@ _ _ _
 - Ikhiloya Imokhai <imokhaiikhiloya@gmail.com>
 
 _ _ _
+## Get The App
+- [Download on playstore](https://play.google.com/store/apps/details?id=com.ikhiloyaimokhai.currencyconverter)
 
+
+_ _ _
 ## License and copyright
 
 © Ikhiloya Imokhai
