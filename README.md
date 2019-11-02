@@ -9,8 +9,8 @@ _ _ _
 - HttpURL Network Calls (No External Libraries)
 - AsyncTask Loader
 - Saving JSON data to SQLite Database
-- Offline Caching using SQLite
-- Create, Read and Delete from SQLite
+- Offline Caching using SQLite Database
+- CRUD Operations on SQLite Database
 - Multiple LoaderCallbacks
 - Accessing Network State
 - Recycler View, Adapter and OnclickListener
